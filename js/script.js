@@ -8,8 +8,8 @@ function checkGrantStatus(grantType) {
 }
 
 function fetchAirtableStatus(grantType, grantCode) {
-    const baseId = 'appwmUMghaAYZpBp0'; // Your Base ID
-    const apiKey = 'patyR0LGPWVrweMs5.ca614637b56fa889f328591f31da302657b7fb25d2b8f920524aee0812095935'; // Your API Key
+    const baseId = 'BASE_ID_HERE'; // Your Base ID
+    const apiKey = 'API_KEY_HERE'; // Your API Key
     const tableName = grantType === 'dev' ? 'DEV GRANTS' : 'COM GRANTS';
 
     fetch(`https://api.airtable.com/v0/${baseId}/${tableName}?filterByFormula={Grant Code}='${grantCode}'`, {
