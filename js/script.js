@@ -8,23 +8,33 @@ function checkGrantStatus(grantType) {
 }
 
 function fetchAirtableStatus(grantType, grantCode) {
-    const baseId = '<YOUR_BASE_ID>';
-    const apiKey = '<YOUR_API_KEY>';
-    const tableName = grantType === 'dev' ? 'Dev Grant' : 'Community Grant';
+    const baseId = 'appwmUMghaAYZpBp0'; // Your Base ID
+    const apiKey = 'patyR0LGPWVrweMs5.ca614637b56fa889f328591f31da302657b7fb25d2b8f920524aee0812095935'; // Your API Key
+    const tableName = grantType === 'dev' ? 'DEV GRANTS' : 'COM GRANTS';
 
     fetch(`https://api.airtable.com/v0/${baseId}/${tableName}?filterByFormula={Grant Code}='${grantCode}'`, {
         headers: {
             Authorization: `Bearer ${apiKey}`
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.records.length > 0) {
-            const status = data.records[0].fields.Status;
-            document.getElementById('grant-status').innerText = `Grant Status: ${status}`;
+        if (data && data.records && data.records.length > 0) {
+            const record = data.records[0].fields;
+            const status = record.Status;
+            const grantName = record['Grant Name']; // Assuming 'Grant Name' is the field name
+            document.getElementById('grant-status').innerText = `Grant Name: ${grantName} \n Grant Status: ${status}`;
         } else {
             document.getElementById('grant-status').innerText = 'No grant found with this code';
         }
     })
-    .catch(error => console.error('Error fetching grant status:', error));
+    .catch(error => {
+        document.getElementById('grant-status').innerText = 'Error fetching grant status';
+        console.error('Error fetching grant status:', error);
+    });
 }
